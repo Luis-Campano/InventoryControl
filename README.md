@@ -25,7 +25,7 @@ Abra el archivo `appsettings.json` en el proyecto web y configure sus credencial
 
 **Desde Visual Studio (recomendado):**
 
-1. Abra el explorador de archivos y haga doble clic sobre el archivo de solución `.sln` del proyecto para cargardo en el IDE.
+1. Abra el explorador de archivos y haga doble clic sobre el archivo de solución `.sln` del proyecto para cargardo en el IDE
 2. Asegúrese de que el proyecto esté configurado como el proyecto de inicio
 3. Presione la tecla `F5` o haga clic en el botón (icono de play verde) en la barra de herramientas superior
-4. El IDE restaurará automáticamente los paquetes NuGet, compilará la solución y levantará un servidor local web abriendo su navegador por defecto en la pantalla del inventario
+4. Compilará la solución y levantará un servidor local web abriendo su navegador por defecto en la pantalla del inventario

@@ -39,17 +39,16 @@ namespace InventoryControl.Services
         /// <returns>Lista de productos activos</returns>
         public async Task<IEnumerable<ProductDto>> GetActiveProductsAsync()
         {
-            var activeProducts = await _context.Products
+            return await _context.Products
                 .Where(p => p.IsActive)
+                .Select(p => new ProductDto
+                {
+                    Id = p.Id,
+                    Code = p.Code,
+                    Name = p.Name,
+                    IsActive = p.IsActive
+                })
                 .ToListAsync();
-
-            return activeProducts.Select(p => new ProductDto
-            {
-                Id = p.Id,
-                Code = p.Code,
-                Name = p.Name,
-                IsActive = p.IsActive,
-            });
         }
 
         /// <summary>
@@ -72,10 +71,10 @@ namespace InventoryControl.Services
                 ProductCode = m.Product?.Code ?? string.Empty,
                 ProductName = m.Product?.Name ?? string.Empty,
                 MovementType = m.MovementType,
-                MovementTypeName = m.MovementType == 1 ? "Entrada" : "Salida",
+                MovementTypeName = m.MovementType == (int)MovementType.Inbound ? "Entrada" : "Salida",
                 Quantity = m.Quantity,
                 MovementDate = m.MovementDate,
-                Remarks = m.Remarks ?? string.Empty
+                Remarks = m.Remarks
             });
         }
 
@@ -114,14 +113,14 @@ namespace InventoryControl.Services
                 .ToListAsync();
 
             return products.Select(p => new ProductDto
-            {
-                Id = p.Id,
-                Code = p.Code,
-                Name = p.Name,
-                Description = p.Description ?? string.Empty,
-                Price = p.Price,
+                {
+                    Id = p.Id,
+                    Code = p.Code,
+                    Name = p.Name,
+                    Description = p.Description ?? string.Empty,
+                    Price = p.Price,
                 CategoryName = p.Category?.Name ?? "Sin categoría",
-                IsActive = p.IsActive,
+                    IsActive = p.IsActive,
                 CurrentStock = p.Movements.Where(m => m.MovementType == 1).Sum(m => m.Quantity) -
                                p.Movements.Where(m => m.MovementType == 2).Sum(m => m.Quantity)
             });
@@ -132,7 +131,6 @@ namespace InventoryControl.Services
         /// </summary>
         /// <param name="movement">El movimiento a registrar</param>
         /// <returns>True si el movimiento se registró correctamente, false en caso contrario</returns>
-        /// <exception cref="InvalidOperationException"></exception>
         public async Task<bool> RegisterMovementAsync(MovementDto movement)
         {
             if (movement.MovementType == (int)MovementType.Outbound)
