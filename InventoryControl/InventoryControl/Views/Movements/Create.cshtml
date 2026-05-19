@@ -1,0 +1,55 @@
+﻿@model InventoryControl.Models.Dtos.MovementDto
+
+@{
+    ViewData["Title"] = "New Management Transaction";
+}
+
+<div class="container mt-4" style="max-width: 600px;">
+    <h2>Registrar Movimiento de Inventario</h2>
+    <hr />
+
+    <form asp-action="Create" method="post" id="movementForm" novalidate>
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <div class="mb-3">
+            <label class="form-label">Selecciona un producto</label>
+            <select asp-for="ProductId" class="form-select" required>
+                <option value="">-- Seleccionar Artículo --</option>
+                @foreach (var prod in ViewBag.Products)
+                {
+                    <option value="@prod.Id">@prod.Code - @prod.Name</option>
+                }
+            </select>
+            <span class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Operación de Movimiento</label>
+            <select asp-for="MovementType" class="form-select" required>
+                <option value="1">Entrada</option>
+                <option value="2">Salida</option>
+            </select>
+            <span class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Cantidad de Unidades</label>
+            <input asp-for="Quantity" type="number" class="form-value form-control" id="txtQuantity" required />
+            <span asp-validation-for="Quantity" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Observaciones</label>
+            <textarea asp-for="Remarks" class="form-control" rows="3"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-success">Guardar</button>
+        <a href="@Url.Action("Index", "Products")" class="btn btn-outline-secondary">Cancelar</a>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        validateFormRequiredFields('movementForm');
+    </script>
+}

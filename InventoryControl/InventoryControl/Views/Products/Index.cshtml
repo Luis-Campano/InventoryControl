@@ -1,0 +1,48 @@
+﻿@model IEnumerable<InventoryControl.Models.Dtos.ProductDto>
+
+@{
+    ViewData["Title"] = "Products";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Inventario de Stock</h2>
+        <a href="@Url.Action("Create", "Movements")" class="btn btn-primary">Registrar Movimiento</a>
+    </div>
+
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Código</th>
+                <th>Nombre</th>
+                <th>Categoría</th>
+                <th>Precio</th>
+                <th>Stock Actual</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Code</td>
+                    <td>@item.Name</td>
+                    <td>@item.CategoryName</td>
+                    <td>@item.Price.ToString("C")</td>
+                    <td>
+                        <span class="badge @(item.CurrentStock > 0 ? "bg-success" : "bg-danger")">
+                            @item.CurrentStock
+                        </span>
+                    </td>
+                    <td>@(item.IsActive ? "Activo" : "Inactivo")</td>
+                    <td>
+                        <a href="@Url.Action("History", "Products", new { id = item.Id })" class="btn btn-sm btn-info text-white">
+                            Ver Historial
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,44 @@
+﻿@model IEnumerable<InventoryControl.Models.Dtos.MovementDto>
+
+@{
+    ViewData["Title"] = "Movement History";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Historial: @ViewBag.ProductName <small class="text-muted">(@ViewBag.ProductCode)</small></h2>
+        <a href="@Url.Action("Index", "Products")" class="btn btn-secondary">Volver al Inventario</a>
+    </div>
+
+    <table class="table table-hover table-bordered">
+        <thead class="table-secondary">
+            <tr>
+                <th>Fecha</th>
+                <th>Tipo</th>
+                <th>Cantidad</th>
+                <th>Observaciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="4" class="text-center">No se encontraron movimientos registrados para este producto.</td>
+                </tr>
+            }
+            @foreach (var m in Model)
+            {
+                <tr>
+                    <td>@m.MovementDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                    <td>
+                        <span class="badge @(m.MovementType == 1 ? "bg-success" : "bg-warning text-dark")">
+                            @m.MovementTypeName
+                        </span>
+                    </td>
+                    <td>@m.Quantity</td>
+                    <td>@m.Remarks</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
